@@ -1,8 +1,14 @@
-import * as d3 from "d3";
-import { useEffect, useRef, useState } from "react";
-import Rectangle from "../../components/SVGElements/Rectangle";
-import Rhombus from "../../components/SVGElements/Rhombus";
-import { INIT_COORDS, SVGHRIGHT, SVGWIDTH } from "../../constants";
+import { Selection, select } from "d3";
+import {
+  Children,
+  isValidElement,
+  ReactElement,
+  SVGProps,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { INIT_COORDS, SVGHEIGHT, SVGWIDTH } from "../../constants";
 import { TSVGCoordinates, TSVGDimensions } from "../../types";
 
 import {
@@ -14,10 +20,46 @@ import {
 import "./styles.css";
 import SVGControllers from "./SVGControllers";
 
-const SVGViewer = () => {
+const INVALID_SVG_CONTAINERS = ["div", "span", "section", "article", "p"];
+
+/**
+ * SVGViewer Component
+ *
+ * A specialized viewer canvas that handles zooming, panning, and resetting
+ * for SVG-based graphics.
+ *
+ * @param {ReactElement<SVGProps<SVGElement>> | ReactElement<SVGProps<SVGElement>>[]} props.children
+ *        Accepts ONLY valid SVG elements (e.g., `<circle>`, `<rect>`, `<g>`, or custom
+ *        components returning SVG elements).
+ *        ⚠️ DO NOT wrap children in HTML layout elements like `<div>` or `<span>`,
+ *        as they break SVG rendering boundaries and will trigger a runtime error.
+ */
+
+const SVGViewer = ({
+  children,
+}: {
+  children:
+    | ReactElement<SVGProps<SVGElement>>
+    | ReactElement<SVGProps<SVGElement>>[];
+}) => {
+  Children.forEach(children, (child) => {
+    if (isValidElement(child)) {
+      const childType = child.type;
+
+      if (
+        typeof childType === "string" &&
+        INVALID_SVG_CONTAINERS.includes(childType)
+      ) {
+        throw new Error(
+          `<SVGViewer> only accepts SVG elements. Found a <${childType}>.`
+        );
+      }
+    }
+  });
+
   const svgAreaRef = useRef<SVGSVGElement>(null);
   const [SVGCanvas, setSVGCanvas] =
-    useState<d3.Selection<SVGSVGElement | null, unknown, null, undefined>>();
+    useState<Selection<SVGSVGElement | null, unknown, null, undefined>>();
   const [zoomValue, setZoomValue] = useState<number>(1);
 
   const [isPannable, setIsPannable] = useState<boolean>(false);
@@ -44,7 +86,8 @@ const SVGViewer = () => {
 
   useEffect(() => {
     if (SVGCanvas !== undefined && SVGCanvas !== null) {
-      SVGCanvas.on("click", togglePan);
+      SVGCanvas.on("mouseenter", () => setIsPannable(true));
+      SVGCanvas.on("mouseleave", () => setIsPannable(false));
     }
   }, [SVGCanvas]);
 
@@ -56,7 +99,7 @@ const SVGViewer = () => {
   }, [SVGCanvas, viewBox, ratio]);
 
   useEffect(() => {
-    d3.select("g#container").attr("transform", `scale(${zoomValue})`);
+    select("g#container").attr("transform", `scale(${zoomValue})`);
   }, [zoomValue]);
 
   useEffect(() => {
@@ -69,12 +112,6 @@ const SVGViewer = () => {
       SVGCanvas.attr("viewBox", viewBoxString);
     }
   }, [newViewBox]);
-
-  function togglePan() {
-    setIsPannable((prev) => {
-      return !prev;
-    });
-  }
 
   function enableEvents() {
     if (SVGCanvas !== undefined) {
@@ -105,13 +142,15 @@ const SVGViewer = () => {
   function zoomIn() {
     setZoomValue((prev) => prev + 0.3);
   }
+
   function zoomOut() {
     if (zoomValue - 1 > 0) {
       setZoomValue((prev) => prev - 0.3);
     }
   }
+
   function resetAll() {
-    const svg = d3.select(svgAreaRef.current);
+    const svg = select(svgAreaRef.current);
     svg.attr("viewBox", `0 0 ${viewBox.width} ${viewBox.height}`);
     setZoomValue(1);
   }
@@ -123,7 +162,7 @@ const SVGViewer = () => {
         id="svgarea"
         ref={svgAreaRef}
         width={SVGWIDTH}
-        height={SVGHRIGHT}
+        height={SVGHEIGHT}
         viewBox="0 0 400 400"
         style={{
           borderRadius: "5px",
@@ -131,25 +170,7 @@ const SVGViewer = () => {
           cursor: "grab",
         }}
       >
-        <g id="container">
-          <Rectangle
-            x="100"
-            y="10"
-            width="250"
-            height="50"
-            textData="Rectangle Coords: [100, 10]"
-          />
-
-          <Rectangle
-            x="-50"
-            y="70"
-            width="200"
-            height="50"
-            textData="Rectangle Coords: [-50, 70]"
-          />
-
-          <Rhombus x="50" y="20" width="100" height="100" textContent="" />
-        </g>
+        <g id="container">{children}</g>
       </svg>
     </div>
   );
