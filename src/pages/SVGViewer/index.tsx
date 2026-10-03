@@ -16,7 +16,6 @@ import {
   onPointerMove,
   onPointerUp,
 } from "./functions";
-import "./styles.css";
 import SVGControllers from "./SVGControllers";
 
 const INVALID_SVG_CONTAINERS = ["div", "span", "section", "article", "p"];
