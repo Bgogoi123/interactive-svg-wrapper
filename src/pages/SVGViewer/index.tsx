@@ -8,7 +8,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { INIT_COORDS, SVGHEIGHT, SVGWIDTH } from "../../constants";
 import { TSVGCoordinates, TSVGDimensions } from "../../types";
 
 import {
@@ -21,6 +20,7 @@ import "./styles.css";
 import SVGControllers from "./SVGControllers";
 
 const INVALID_SVG_CONTAINERS = ["div", "span", "section", "article", "p"];
+export const INIT_COORDS = { x: 0, y: 0 };
 
 /**
  * SVGViewer Component
