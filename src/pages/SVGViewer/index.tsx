@@ -161,14 +161,20 @@ const SVGViewer = ({
   }
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
       <SVGControllers
         resetAll={resetAll}
         zoomIn={zoomIn}
         zoomOut={zoomOut}
         scrollToContent={scrollToContent}
       />
-      <div style={{ overflow: "scroll", maxHeight: "850px", padding: "1rem" }}>
+      <div style={{ overflow: "scroll", maxHeight: "850px" }}>
         <svg
           id="svgarea"
           ref={svgAreaRef}
