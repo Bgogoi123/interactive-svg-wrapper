@@ -5,7 +5,7 @@
 
 ### 🤖 Features:
   - Wrap a single or multiple SVG element(s) within the wrapper component.
-  - **Operations Available**: Zoom-in, Zoom-out, and Panning.
+  - **Operations Available**: Zoom-in, Zoom-out, Panning, Reset, and Scrolling back to content.
 
 
 ## 📝 How to Wrap - React Code Example:
