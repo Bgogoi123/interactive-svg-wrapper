@@ -32,7 +32,7 @@ export function onPointerDown({
     `cursor: grabbing; 
      border: 2px solid silver; 
      border-radius: 5px; 
-     background-color: #d6d6d6`
+     background-color: #F7F7F7`
   );
 
   setIsPointerDown(true);
@@ -87,7 +87,7 @@ export function onPointerUp({
     `cursor: grab;
      border: 2px solid silver; 
      border-radius: 5px;
-     background-color: #d6d6d6`
+     background-color: #F7F7F7`
   );
 
   setIsPointerDown(false);
