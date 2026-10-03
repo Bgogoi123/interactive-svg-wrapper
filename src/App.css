@@ -7,3 +7,29 @@
 body {
   background-color: rgb(255, 255, 255);
 }
+
+.external-link {
+  text-decoration: none;
+  color: #0B6FA1;
+  align-self: flex-start;
+  font-size: larger;
+
+}
+
+.external-link:hover {
+  color: #4863C7;
+  transition-duration: 300ms;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.rhombus {
+  transform: translate(0, 100px) rotate(45deg);
+  transform-origin: center;
+}
