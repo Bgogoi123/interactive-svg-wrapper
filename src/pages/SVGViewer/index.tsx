@@ -8,7 +8,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { INIT_COORDS, SVGHEIGHT, SVGWIDTH } from "../../constants";
 import { TSVGCoordinates, TSVGDimensions } from "../../types";
 
 import {
@@ -21,6 +20,7 @@ import "./styles.css";
 import SVGControllers from "./SVGControllers";
 
 const INVALID_SVG_CONTAINERS = ["div", "span", "section", "article", "p"];
+export const INIT_COORDS = { x: 0, y: 0 };
 
 /**
  * SVGViewer Component
@@ -71,7 +71,7 @@ const SVGViewer = ({
   const [viewBox, setViewBox] = useState<TSVGDimensions>({
     x: 0,
     y: 0,
-    width: 400,
+    width: 800,
     height: 400,
   });
 
@@ -144,7 +144,7 @@ const SVGViewer = ({
   }
 
   function zoomOut() {
-    if (zoomValue - 1 > 0) {
+    if (zoomValue - 0.3 >= 0) {
       setZoomValue((prev) => prev - 0.3);
     }
   }
@@ -155,23 +155,37 @@ const SVGViewer = ({
     setZoomValue(1);
   }
 
+  function scrollToContent() {
+    const svg = select(svgAreaRef.current);
+    svg.attr("viewBox", `0 0 ${viewBox.width} ${viewBox.height}`);
+  }
+
   return (
     <div>
-      <SVGControllers resetAll={resetAll} zoomIn={zoomIn} zoomOut={zoomOut} />
-      <svg
-        id="svgarea"
-        ref={svgAreaRef}
-        width={SVGWIDTH}
-        height={SVGHEIGHT}
-        viewBox="0 0 400 400"
-        style={{
-          borderRadius: "5px",
-          backgroundColor: "#d6d6d6",
-          cursor: "grab",
-        }}
-      >
-        <g id="container">{children}</g>
-      </svg>
+      <SVGControllers
+        resetAll={resetAll}
+        zoomIn={zoomIn}
+        zoomOut={zoomOut}
+        scrollToContent={scrollToContent}
+      />
+      <div style={{ overflow: "scroll", maxHeight: "850px", padding: "1rem" }}>
+        <svg
+          id="svgarea"
+          ref={svgAreaRef}
+          viewBox="0 0 800 400"
+          preserveAspectRatio="xMidYMid meet"
+          style={{
+            borderRadius: "5px",
+            backgroundColor: "#F7F7F7",
+            cursor: "grab",
+            width: "100%",
+            height: "auto",
+            display: "block",
+          }}
+        >
+          <g id="container">{children}</g>
+        </svg>
+      </div>
     </div>
   );
 };

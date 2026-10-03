@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import { select } from "d3";
 import { TPanningEvent, TSVGCoordinates, TSVGDimensions } from "../../types";
 
 //get svg canvas
@@ -13,7 +13,7 @@ export function getSVGCanvas({
     >
   ) => void;
 }) {
-  const svgArea = d3.select(svgAreaRef.current);
+  const svgArea = select(svgAreaRef.current);
   setSVGCanvas(svgArea);
 }
 
@@ -27,12 +27,12 @@ export function onPointerDown({
   setIsPointerDown: (value: React.SetStateAction<boolean>) => void;
   setPointerOrigin: (value: React.SetStateAction<TSVGCoordinates>) => void;
 }) {
-  d3.select(event.target as HTMLElement).attr(
+  select(event.target as HTMLElement).attr(
     "style",
     `cursor: grabbing; 
      border: 2px solid silver; 
      border-radius: 5px; 
-     background-color: #d6d6d6`
+     background-color: #F7F7F7`
   );
 
   setIsPointerDown(true);
@@ -82,12 +82,12 @@ export function onPointerUp({
   setViewBox: (value: React.SetStateAction<TSVGDimensions>) => void;
   newViewBox: TSVGCoordinates;
 }) {
-  d3.select(event.target as HTMLElement).attr(
+  select(event.target as HTMLElement).attr(
     "style",
     `cursor: grab;
      border: 2px solid silver; 
      border-radius: 5px;
-     background-color: #d6d6d6`
+     background-color: #F7F7F7`
   );
 
   setIsPointerDown(false);

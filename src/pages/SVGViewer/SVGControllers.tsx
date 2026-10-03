@@ -5,6 +5,7 @@ const SVGControllers = ({
   zoomIn,
   zoomOut,
   resetAll,
+  scrollToContent,
 }: TSVGControllersProps) => {
   return (
     <div className="buttonsContainer">
@@ -15,6 +16,11 @@ const SVGControllers = ({
       />
       <ControllerButton text="+" title="Zoom In" onClickFunction={zoomIn} />
       <ControllerButton text="-" title="Zoom Out" onClickFunction={zoomOut} />
+      <ControllerButton
+        text="Scroll back to content"
+        title="Scroll back to content"
+        onClickFunction={scrollToContent}
+      />
     </div>
   );
 };

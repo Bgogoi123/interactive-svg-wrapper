@@ -2,6 +2,7 @@ export type TSVGControllersProps = {
   zoomIn(): void;
   zoomOut(): void;
   resetAll(): void;
+  scrollToContent(): void;
 };
 
 export type TPanningEvent = PointerEvent | MouseEvent;
